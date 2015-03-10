@@ -31,15 +31,19 @@ int main(int argc, char *argv[])
     }
     
     sock=socket(AF_INET, SOCK_DGRAM, 0);
+    
     if (sock < 0) error("Opening socket");
     length = sizeof(server);
+    
     bzero(&server,length);
     server.sin_family=AF_INET;
     server.sin_addr.s_addr=INADDR_ANY;
     server.sin_port=htons(atoi(argv[1]));
+    
     if (bind(sock,(struct sockaddr *)&server,length)<0)
         error("binding");
     fromlen = sizeof(struct sockaddr_in);
+    
     while (1) {
         n = recvfrom(sock,buf,1024,0,(struct sockaddr *)&from,&fromlen);
         if (n < 0) error("recvfrom");

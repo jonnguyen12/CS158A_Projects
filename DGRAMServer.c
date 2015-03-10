@@ -60,19 +60,22 @@ int main(int argc, char* argv[])
         printError("Error! Can't bind.\n");
     }
     
-    returnValue = recvfrom(sock, buffer, 2048, 0, (struct sockaddr*)&client, &clientLength);
-    
-    if (returnValue < 0) {
-        printError("Error! CAn't receive from client.\n");
-    }
-    
-    write(1, "Datagram is received", 30);
-    write(1, buffer, returnValue);
-    
-    returnValue = sendto(sock, "Message is received", 20, 0, (struct sockaddr*)&client, clientLength);
-    
-    if (returnValue < 0) {
-        printError("Error! Can't send to client");
+    while (1) {
+        returnValue = recvfrom(sock, buffer, 2048, 0, (struct sockaddr*)&client, &clientLength);
+        
+        if (returnValue < 0) {
+            printError("Error! CAn't receive from client.\n");
+        }
+        
+        write(1, "Datagram is received\n", 30);
+        write(1, buffer, returnValue);
+        
+        returnValue = sendto(sock, "Message is received", 20, 0, (struct sockaddr*)&client, clientLength);
+        
+        if (returnValue < 0) {
+            printError("Error! Can't send to client");
+        }
+        
     }
     
     return 0;
