@@ -1,43 +1,53 @@
-#include <stdio.h>
+/* Creates a datagram server.  The port
+ number is passed as an argument.  This
+ server runs forever */
+
+#include <sys/types.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <string.h>
 #include <netdb.h>
-#define SERVER_PORT 5432
-#define MAX_PENDING 5
-#define MAX_LINE 256
+#include <stdio.h>
 
-int main()
+void error(const char *msg)
 {
-	struct sockaddr_in sin;
-	char buf[MAX_LINE];
-	int len;
-	int s, new_s;
-	
-    /* build address data structure */
-	bzero((char *)&sin, sizeof(sin));
-	
-    sin.sin_family = AF_INET;
-	sin.sin_addr.s_addr = INADDR_ANY;
-	sin.sin_port = htons(SERVER_PORT);
-	
-    /* setup passive open */
-	if ((s = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-		perror("simplex-talk: socket");
-		exit(1);
-	}
-	
-    if ((bind(s, (struct sockaddr *)&sin, sizeof(sin))) < 0) {
-		perror("simplex-talk: bind");
-		exit(1);
-	}
-	
-    recvfrom(s, buf, MAX_LINE, 0, (struct sockaddr*) &sin, &len);
+    perror(msg);
+    exit(0);
+}
+
+int main(int argc, char *argv[])
+{
+    int sock, length, n;
+    socklen_t fromlen;
+    struct sockaddr_in server;
+    struct sockaddr_in from;
+    char buf[1024];
     
+    if (argc < 2) {
+        fprintf(stderr, "ERROR, no port provided\n");
+        exit(0);
+    }
     
-    close(s);
+    sock=socket(AF_INET, SOCK_DGRAM, 0);
+    if (sock < 0) error("Opening socket");
+    length = sizeof(server);
+    bzero(&server,length);
+    server.sin_family=AF_INET;
+    server.sin_addr.s_addr=INADDR_ANY;
+    server.sin_port=htons(atoi(argv[1]));
+    if (bind(sock,(struct sockaddr *)&server,length)<0)
+        error("binding");
+    fromlen = sizeof(struct sockaddr_in);
+    while (1) {
+        n = recvfrom(sock,buf,1024,0,(struct sockaddr *)&from,&fromlen);
+        if (n < 0) error("recvfrom");
+        write(1,"Received a datagram: ",21);
+        write(1,buf,n);
+        n = sendto(sock,"Got your message\n",17,
+                   0,(struct sockaddr *)&from,fromlen);
+        if (n  < 0) error("sendto");
+    }
     return 0;
 }
