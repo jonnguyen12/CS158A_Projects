@@ -57,7 +57,8 @@ int main(int argc, char* argv[])
     //Set server properties
     server.sin_family = AF_INET;
     server.sin_port = htons(portNumber);
-    bcopy((char*)serverInfo->h_addr, (char*)&server.sin_addr, serverInfo->h_length);
+//    serverInfo->h_addr = "10.189.249.188";
+    inet_aton("10.189.249.188", &server.sin_addr);
 
     //Get server length
     serverLength = sizeof(server);
@@ -67,11 +68,11 @@ int main(int argc, char* argv[])
     //Zero out the buffer
     bzero(buffer, 1024);
     //fgets(buffer, 1023, stdin);
-	char bChar[64000];
+	char bChar[640];
 	bzero(bChar, 1);
 	//bChar[0] = 'b';
 	int k = 0;
-	for (k = 0; k < (64000); k++) {
+	for (k = 0; k < (640); k++) {
 		bChar[k] = 'b';
 	}
     //char bChar = 'b';
@@ -79,7 +80,7 @@ int main(int argc, char* argv[])
 	time_t startTime;
 	time(&startTime);
 	int l = 0;
-	for (l = 0; l < 10000; l++) {
+	for (l = 0; l < 100; l++) {
 		returnValue = sendto(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, serverLength);
     }
 	
