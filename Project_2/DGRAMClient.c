@@ -107,8 +107,8 @@ int main(int argc, char* argv[])
     }
 //    t1 += start.tv_sec + (start.tv_usec / 1000000.0);
 //    t2 += end.tv_sec + (end.tv_usec / 1000000.0);
-    t1 += start.tv_usec / 1000.0;
-    t2 += end.tv_usec / 1000.0;
+    t1 += start.tv_usec;
+    t2 += end.tv_usec;
     
     averageRTT = (t2 - t1) / count;
     printf("time of the day:%g\n", averageRTT);
