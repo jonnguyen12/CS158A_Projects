@@ -69,20 +69,17 @@ int main(int argc, char* argv[])
     //Zero out the buffer
     bzero(buffer, 1024);
     //fgets(buffer, 1023, stdin);
-    char bChar[1000] = {'b'};
-//	bzero(bChar, 1);
-	//bChar[0] = 'b';
-//	int k = 0;
-//	for (k = 0; k < (640); k++) {
-//		bChar[k] = 'b';
-//	}
+    char bChar = 'b';
+    
     //Send to server
 	struct timeval start, end;
     double t1, t2;
     float averageRTT = 0;
 
 	int l = 0;
-    int count = 100;
+    int count = 1000;
+    int bytes_sent = 0;
+    int sizeOfPacket = 0;
 	
     for (l = 0; l < count; l++) {
         if (gettimeofday(&start, NULL)) {
@@ -90,31 +87,41 @@ int main(int argc, char* argv[])
         }
         
         
-		returnValue = sendto(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, serverLength);
+		returnValue = sendto(sock, &bChar, strlen(&bChar), 0, (struct sockaddr*)&server, serverLength);
         if (returnValue < 0) {
             printError("Error! Can't send to server\n");
         }
+        bytes_sent += returnValue;
+
      
         //Receive from server
-        returnValue = recvfrom(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, &serverLength);
+        returnValue = recvfrom(sock, &bChar, strlen(&bChar), 0, (struct sockaddr*)&server, &serverLength);
         if (returnValue < 0) {
             printError("Error! Can't receive from server\n");
         }
         
+        sizeOfPacket += sizeof(bChar);
+        
         if (gettimeofday(&end, NULL)) {
             printf("Error time end failed\n");
         }
+        
+        t1 = start.tv_usec;
+        t2 = end.tv_usec;
+        averageRTT += t2 - t1;
     }
 //    t1 += start.tv_sec + (start.tv_usec / 1000000.0);
 //    t2 += end.tv_sec + (end.tv_usec / 1000000.0);
-    t1 += start.tv_usec;
-    t2 += end.tv_usec;
+   
     
-    averageRTT = (t2 - t1) / count;
+    averageRTT = averageRTT / count;
     printf("time of the day:%g\n", averageRTT);
+    printf("size of packet = %d\n", sizeOfPacket);
+    printf("bytes sent = %d\n", bytes_sent);
+    printf("packet loss = %d\n", sizeOfPacket - bytes_sent);
     
     write(1, "Received\n", 20);
-    write(1, buffer, serverLength);
+    write(1, &bChar, serverLength);
 
     close(sock);
     
