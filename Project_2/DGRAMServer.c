@@ -33,6 +33,8 @@ int main(int argc, char* argv[])
     struct sockaddr_in server;
     struct sockaddr_in client;
     
+    int bytes_received = 0;
+    
     char buffer[2048];
     
     if (argc < 2) {
@@ -70,6 +72,7 @@ int main(int argc, char* argv[])
             printError("Error! CAn't receive from client.\n");
         }
         
+        bytes_received += returnValue;
        // write(1, "Datagram is received\n", 30);
         write(1, buffer, returnValue);
         
@@ -78,8 +81,10 @@ int main(int argc, char* argv[])
         if (returnValue < 0) {
             printError("Error! Can't send to client");
         }
-        
+        printf("bytes received = %d", bytes_received);
+
     }
+    
     
     return 0;
     
