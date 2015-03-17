@@ -32,6 +32,7 @@ int main(int argc, char* argv[])
     socklen_t clientLength;
     struct sockaddr_in server;
     struct sockaddr_in client;
+    
     char buffer[2048];
     
     if (argc < 2) {
@@ -53,8 +54,9 @@ int main(int argc, char* argv[])
     portNumber = atoi(argv[1]);
     
     server.sin_family = AF_INET;
-	inet_aton("10.189.249.188", server.sin_addr);
+//	inet_aton("10.189.249.188", server.sin_addr);
    // server.sin_addr.s_addr = "10.189.249.188";
+    server.sin_addr.s_addr = INADDR_ANY;
     server.sin_port = htons(portNumber);
     
     if (bind(sock, (struct sockaddr *) &server, serverLength) < 0) {

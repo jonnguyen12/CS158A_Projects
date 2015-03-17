@@ -15,7 +15,7 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <time.h>
+#include <sys/time.h>
 
 //Print the system error if there is any
 void printError (char * message)
@@ -58,7 +58,8 @@ int main(int argc, char* argv[])
     server.sin_family = AF_INET;
     server.sin_port = htons(portNumber);
 //    serverInfo->h_addr = "10.189.249.188";
-    inet_aton("10.189.249.188", &server.sin_addr);
+//    inet_aton("10.189.249.188", &server.sin_addr);
+    bcopy((char*)serverInfo->h_addr, (char*)&server.sin_addr, serverInfo->h_length);
 
     //Get server length
     serverLength = sizeof(server);
@@ -68,7 +69,7 @@ int main(int argc, char* argv[])
     //Zero out the buffer
     bzero(buffer, 1024);
     //fgets(buffer, 1023, stdin);
-	char bChar[640];
+	char bChar[4];
 	bzero(bChar, 1);
 	//bChar[0] = 'b';
 	int k = 0;
@@ -77,31 +78,47 @@ int main(int argc, char* argv[])
 	}
     //char bChar = 'b';
     //Send to server
-	time_t startTime;
-	time(&startTime);
+	struct timeval start, end;
+    double t1, t2;
+    float averageRTT = 0;
+
 	int l = 0;
-	for (l = 0; l < 100; l++) {
+	
+    for (l = 0; l < 1000; l++) {
+        if (gettimeofday(&start, NULL)) {
+            printf("Error start time failed.\n");
+        }
+        
+        
 		returnValue = sendto(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, serverLength);
+        if (returnValue < 0) {
+            printError("Error! Can't send to server\n");
+        }
+        
+//        //Get the time
+//        time_t now;
+//        time(&now);
+//        double elapsed = difftime(now, startTime);
+//        float sec = (float) elapsed;
+//        averageRTT += sec;
+//        
+        
+        
+        //Receive from server
+        returnValue = recvfrom(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, &serverLength);
+        if (returnValue < 0) {
+            printError("Error! Can't receive from server\n");
+        }
+        
+        if (gettimeofday(&end, NULL)) {
+            printf("Error time end failed\n");
+        }
     }
-	
-	
-    if (returnValue < 0) {
-        printError("Error! Can't send to server\n");
-    }
+    t1 += start.tv_sec + (start.tv_usec / 1000000.0);
+    t2 += end.tv_sec + (end.tv_usec / 1000000.0);
     
-    //Receive from server
-    returnValue = recvfrom(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, &serverLength);
-	
-    time_t now;
-	time(&now);
-	double elapsed = difftime(now, startTime);
-	float sec = (float) elapsed;
-	printf("sec: %f", sec);
-	
-    if (returnValue < 0) {
-        printError("Error! Can't receive from server\n");
-    }
-    
+    averageRTT = (t2 - t1) / 100;
+    printf("time of the day:%g", averageRTT);
     
     write(1, "Received\n", 20);
     write(1, buffer, serverLength);
