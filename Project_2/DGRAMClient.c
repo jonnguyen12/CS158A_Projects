@@ -69,14 +69,13 @@ int main(int argc, char* argv[])
     //Zero out the buffer
     bzero(buffer, 1024);
     //fgets(buffer, 1023, stdin);
-	char bChar[4];
-	bzero(bChar, 1);
+	char bChar = 'b';
+//	bzero(bChar, 1);
 	//bChar[0] = 'b';
-	int k = 0;
-	for (k = 0; k < (640); k++) {
-		bChar[k] = 'b';
-	}
-    //char bChar = 'b';
+//	int k = 0;
+//	for (k = 0; k < (640); k++) {
+//		bChar[k] = 'b';
+//	}
     //Send to server
 	struct timeval start, end;
     double t1, t2;
@@ -90,22 +89,13 @@ int main(int argc, char* argv[])
         }
         
         
-		returnValue = sendto(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, serverLength);
+		returnValue = sendto(sock, &bChar, strlen(&bChar), 0, (struct sockaddr*)&server, serverLength);
         if (returnValue < 0) {
             printError("Error! Can't send to server\n");
         }
-        
-//        //Get the time
-//        time_t now;
-//        time(&now);
-//        double elapsed = difftime(now, startTime);
-//        float sec = (float) elapsed;
-//        averageRTT += sec;
-//        
-        
-        
+     
         //Receive from server
-        returnValue = recvfrom(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, &serverLength);
+        returnValue = recvfrom(sock, &bChar, strlen(&bChar), 0, (struct sockaddr*)&server, &serverLength);
         if (returnValue < 0) {
             printError("Error! Can't receive from server\n");
         }
@@ -118,7 +108,7 @@ int main(int argc, char* argv[])
     t2 += end.tv_sec + (end.tv_usec / 1000000.0);
     
     averageRTT = (t2 - t1) / 100;
-    printf("time of the day:%g", averageRTT);
+    printf("time of the day:%g\n", averageRTT);
     
     write(1, "Received\n", 20);
     write(1, buffer, serverLength);
