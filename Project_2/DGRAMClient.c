@@ -82,8 +82,9 @@ int main(int argc, char* argv[])
     float averageRTT = 0;
 
 	int l = 0;
+    int count = 100;
 	
-    for (l = 0; l < 1000; l++) {
+    for (l = 0; l < count; l++) {
         if (gettimeofday(&start, NULL)) {
             printf("Error start time failed.\n");
         }
@@ -109,7 +110,7 @@ int main(int argc, char* argv[])
     t1 += start.tv_usec / 1000.0;
     t2 += end.tv_usec / 1000.0;
     
-    averageRTT = (t2 - t1) / 1000;
+    averageRTT = (t2 - t1) / count;
     printf("time of the day:%g\n", averageRTT);
     
     write(1, "Received\n", 20);
