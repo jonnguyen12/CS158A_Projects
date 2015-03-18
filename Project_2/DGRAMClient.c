@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
     server.sin_family = AF_INET;
     server.sin_port = htons(portNumber);
 //    serverInfo->h_addr = "10.189.249.188";
-    inet_aton("10.189.248.160", &server.sin_addr);
+    inet_aton("10.189.250.181", &server.sin_addr);
 //    bcopy((char*)serverInfo->h_addr, (char*)&server.sin_addr, serverInfo->h_length);
 
     //Get server length
@@ -69,7 +69,11 @@ int main(int argc, char* argv[])
     //Zero out the buffer
     bzero(buffer, 1024);
     //fgets(buffer, 1023, stdin);
-    char bChar = 'b';
+    char bChar[4000];
+    
+    for (int i = 0; i < 4000; i++) {
+        bChar[i] = 'A';
+    }
     
     //Send to server
 	struct timeval start, end;
@@ -77,7 +81,7 @@ int main(int argc, char* argv[])
     float averageRTT = 0;
 
 	int l = 0;
-    int count = 1000;
+    int count = 100;
     int bytes_sent = 0;
     int sizeOfPacket = 0;
 	
@@ -87,7 +91,7 @@ int main(int argc, char* argv[])
         }
         
         
-		returnValue = sendto(sock, &bChar, strlen(&bChar), 0, (struct sockaddr*)&server, serverLength);
+		returnValue = sendto(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, serverLength);
         if (returnValue < 0) {
             printError("Error! Can't send to server\n");
         }
@@ -95,7 +99,7 @@ int main(int argc, char* argv[])
 
      
         //Receive from server
-        returnValue = recvfrom(sock, &bChar, strlen(&bChar), 0, (struct sockaddr*)&server, &serverLength);
+        returnValue = recvfrom(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, &serverLength);
         if (returnValue < 0) {
             printError("Error! Can't receive from server\n");
         }
@@ -119,6 +123,7 @@ int main(int argc, char* argv[])
     printf("size of packet = %d\n", sizeOfPacket);
     printf("bytes sent = %d\n", bytes_sent);
     printf("packet loss = %d\n", sizeOfPacket - bytes_sent);
+    printf("%s\n",bChar);
     
     write(1, "Received\n", 20);
     write(1, &bChar, serverLength);
