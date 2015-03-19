@@ -69,9 +69,12 @@ int main(int argc, char* argv[])
     //Zero out the buffer
     bzero(buffer, 1024);
     //fgets(buffer, 1023, stdin);
-    char bChar[16000];
+    int messageSize = 1000;
+    int count = 100;
+
+    char bChar[messageSize];
     
-    for (int i = 0; i < 16000; i++) {
+    for (int i = 0; i < messageSize; i++) {
         bChar[i] = 'A';
     }
     
@@ -81,7 +84,6 @@ int main(int argc, char* argv[])
     float averageRTT = 0;
 
 	int l = 0;
-    int count = 100;
     int bytes_sent = 0;
     int sizeOfPacket = 0;
 	
