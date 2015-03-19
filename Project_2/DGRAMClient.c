@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
     server.sin_family = AF_INET;
     server.sin_port = htons(portNumber);
 //    serverInfo->h_addr = "10.189.249.188";
-    inet_aton("10.189.250.181", &server.sin_addr);
+    inet_aton("24.6.129.25", &server.sin_addr);
 //    bcopy((char*)serverInfo->h_addr, (char*)&server.sin_addr, serverInfo->h_length);
 
     //Get server length
