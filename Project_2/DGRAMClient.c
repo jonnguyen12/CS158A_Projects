@@ -69,9 +69,9 @@ int main(int argc, char* argv[])
     //Zero out the buffer
     bzero(buffer, 1024);
     //fgets(buffer, 1023, stdin);
-    char bChar[4000];
+    char bChar[1000];
     
-    for (int i = 0; i < 4000; i++) {
+    for (int i = 0; i < 1000; i++) {
         bChar[i] = 'A';
     }
     
