@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
     
     int bytes_received = 0;
     
-    char buffer[2048];
+    char buffer[17000];
     
     if (argc < 2) {
         fprintf(stderr, "Error! Must provide port number.\n");
@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
     }
     
     while (1) {
-        returnValue = recvfrom(sock, buffer, 2048, 0, (struct sockaddr*)&client, &clientLength);
+        returnValue = recvfrom(sock, buffer, 17000, 0, (struct sockaddr*)&client, &clientLength);
         
         if (returnValue < 0) {
             printError("Error! CAn't receive from client.\n");
