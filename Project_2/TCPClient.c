@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
     struct hostent *server; //Server info
     
     //Check if user does not provide hostname and port number
-    char buffer[256];
+    char buffer[1000000];
     if (argc < 3) {
         fprintf(stderr, "usage %s hostname port\n", argv[0]);
         exit(0);
@@ -77,12 +77,13 @@ int main(int argc, char* argv[])
     //Send a message
 //    printf("Enter a message\n");
     printf("Sending 1 byte - 1000 times to server\n");
-    bzero(buffer, 256);
-    fgets(buffer, 255, stdin);
+    bzero(buffer, 1000000);
+    fgets(buffer, 1000000, stdin);
     
     int messageSize = 1000;
     char ch[messageSize];
     int loopCount = 100;
+//    char firstChar = 'A';
     
     //Init the ch array
     for (int i = 0; i < messageSize; i++) {
@@ -92,8 +93,8 @@ int main(int argc, char* argv[])
     //Loop to send packet with the loop count
     for (int i = 0; i < loopCount; i++) {
         //Write to server
-        packet = write(socketFileDescriptor, &ch, strlen(buffer));
-        
+        packet = write(socketFileDescriptor, &ch, messageSize);
+//        printf(strlen(ch));
         if (packet < 0) {
             printError("Error! Can't write.\n");
             
@@ -101,7 +102,7 @@ int main(int argc, char* argv[])
         
         //Read from server
         bzero(buffer, 256);
-        packet = read(socketFileDescriptor, buffer, 255);
+        packet = read(socketFileDescriptor, buffer, 20);
         
         if (packet < 0) {
             printError("Error! Can't read\n");
