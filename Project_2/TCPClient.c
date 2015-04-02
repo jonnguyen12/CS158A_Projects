@@ -65,9 +65,9 @@ int main(int argc, char* argv[])
     
     //Set the server address properties
     serverAddress.sin_family = AF_INET;
-//    bcopy((char*)server->h_addr, (char*)&serverAddress.sin_addr.s_addr, server->h_length);
+    bcopy((char*)server->h_addr, (char*)&serverAddress.sin_addr.s_addr, server->h_length);
     serverAddress.sin_port = htons(portNumber);
-    inet_aton("10.189.250.185", &serverAddress.sin_addr);
+//    inet_aton("10.189.250.185", &serverAddress.sin_addr);
     
     //Connect to server
     if (connect(socketFileDescriptor, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
@@ -78,6 +78,8 @@ int main(int argc, char* argv[])
     printf("Enter a message\n");
     bzero(buffer, 256);
     fgets(buffer, 255, stdin);
+    
+    
     
     //Write to server
     packet = write(socketFileDescriptor, buffer, strlen(buffer));
