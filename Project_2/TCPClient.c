@@ -75,30 +75,36 @@ int main(int argc, char* argv[])
     }
     
     //Send a message
-    printf("Enter a message\n");
+//    printf("Enter a message\n");
+    printf("Sending 1 byte - 1000 times to server\n");
     bzero(buffer, 256);
     fgets(buffer, 255, stdin);
     
+    char ch = 'A';
+    int loopCount = 1000;
     
     
-    //Write to server
-    packet = write(socketFileDescriptor, buffer, strlen(buffer));
-    
-    if (packet < 0) {
-        printError("Error! Can't write.\n");
+    for (int i = 0; i < loopCount; i++) {
+        //Write to server
+        packet = write(socketFileDescriptor, &ch, strlen(buffer));
         
+        if (packet < 0) {
+            printError("Error! Can't write.\n");
+            
+        }
+        
+        //Read from server
+        bzero(buffer, 256);
+        packet = read(socketFileDescriptor, buffer, 255);
+        
+        if (packet < 0) {
+            printError("Error! Can't read\n");
+        }
+        
+        //Print out server message
+        printf("%s\n", buffer);
     }
     
-    //Read from server
-    bzero(buffer, 256);
-    packet = read(socketFileDescriptor, buffer, 255);
-    
-    if (packet < 0) {
-        printError("Error! Can't read\n");
-    }
-    
-    //Print out server message
-    printf("%s\n", buffer);
     
     //Close the connection
     close(socketFileDescriptor);
