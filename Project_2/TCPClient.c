@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
     serverAddress.sin_family = AF_INET;
     bcopy((char*)server->h_addr, (char*)&serverAddress.sin_addr.s_addr, server->h_length);
     serverAddress.sin_port = htons(portNumber);
-//    inet_aton("10.189.250.185", &serverAddress.sin_addr);
+//  inet_aton("10.189.250.185", &serverAddress.sin_addr);
     
     //Connect to server
     if (connect(socketFileDescriptor, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
@@ -80,10 +80,16 @@ int main(int argc, char* argv[])
     bzero(buffer, 256);
     fgets(buffer, 255, stdin);
     
-    char ch = 'A';
-    int loopCount = 1000;
+    int messageSize = 1000;
+    char ch[messageSize];
+    int loopCount = 100;
     
+    //Init the ch array
+    for (int i = 0; i < messageSize; i++) {
+        ch[i] = 'A';
+    }
     
+    //Loop to send packet with the loop count
     for (int i = 0; i < loopCount; i++) {
         //Write to server
         packet = write(socketFileDescriptor, &ch, strlen(buffer));
