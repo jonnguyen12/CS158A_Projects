@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
     bzero(buffer, 256);
     fgets(buffer, 255, stdin);
     
-    int messageSize = 1000;
+    int messageSize = 4000;
     char ch[messageSize];
     int loopCount = 100;
     
