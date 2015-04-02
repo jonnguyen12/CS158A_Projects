@@ -14,6 +14,9 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/time.h>
 
 //Print the system error if there is any
 void printError (char * message)
@@ -62,8 +65,9 @@ int main(int argc, char* argv[])
     
     //Set the server address properties
     serverAddress.sin_family = AF_INET;
-    bcopy((char*)server->h_addr, (char*)&serverAddress.sin_addr.s_addr, server->h_length);
+//    bcopy((char*)server->h_addr, (char*)&serverAddress.sin_addr.s_addr, server->h_length);
     serverAddress.sin_port = htons(portNumber);
+    inet_aton("10.189.250.185", &serverAddress.sin_addr);
     
     //Connect to server
     if (connect(socketFileDescriptor, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
