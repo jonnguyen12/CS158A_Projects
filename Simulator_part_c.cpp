@@ -40,13 +40,35 @@ double run(double lambda)
 int main (int argc, char * argv[]) {
     int i;
     double sum, lambda;
-    for (lambda = N; lambda >= 4; lambda -= 2) {
+    double min, currentValue, max;
+    for (lambda = N; lambda >= 2; lambda -= 2) {
         sum = 0;
+        min = 0;
+        max = 0;
+        currentValue = 0;
         for (i = 0; i < RUNCOUNT; i++) {
-            sum += run(lambda);
-//            cout << lambda << "   " << sum/RUNCOUNT << endl;
+            currentValue = run(lambda);
+            
+            if (i == 0) {
+                min = currentValue;
+                max = currentValue;
+            }
+
+            sum += currentValue;
+            
+            if (currentValue < min) {
+                min = currentValue;
+            }
+            
+            if (currentValue > max) {
+                max = currentValue;
+            }
             printf("%.3f : %.3f\n", lambda, sum/RUNCOUNT);
         }
+        
+        printf("%.3f : miminum value = %.3f\n", lambda, min);
+        printf("%.3f : maximum value = %.3f\n", lambda, max);
+
     }
     return 0;
 }
