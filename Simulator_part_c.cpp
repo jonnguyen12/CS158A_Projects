@@ -1,10 +1,10 @@
-#include <iostream.h>
+#include <iostream>
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
 
 const int RUNCOUNT = 100000;
-
+using namespace std;
 // X = X(lambda) is our random variable
 double X(double lambda) {
     double u;
@@ -35,14 +35,16 @@ double run(double lambda)
 
 }
 
-void main (int argc, char * argv[]) {
+int main (int argc, char * argv[]) {
     int i;
     double sum, lambda;
     for (lambda = 1.0; lambda <= 3.01; lambda += 0.1) {
         sum = 0;
         for (i = 0; i < RUNCOUNT; i++) {
             sum += run(lambda);
-            cout << lambda << "   " << sum/RUNCOUNT << endl;
+//            cout << lambda << "   " << sum/RUNCOUNT << endl;
+            printf("%.3f : %.3f\n", lambda, sum/RUNCOUNT);
         }
     }
+    return 0;
 }
