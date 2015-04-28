@@ -3,7 +3,9 @@
 #include <math.h>
 #include <stdio.h>
 
-const int RUNCOUNT = 100000;
+const int RUNCOUNT = 50;
+const int N = 20;
+
 using namespace std;
 // X = X(lambda) is our random variable
 double X(double lambda) {
@@ -38,7 +40,7 @@ double run(double lambda)
 int main (int argc, char * argv[]) {
     int i;
     double sum, lambda;
-    for (lambda = 1.0; lambda <= 3.01; lambda += 0.1) {
+    for (lambda = N; lambda >= 4; lambda -= 2) {
         sum = 0;
         for (i = 0; i < RUNCOUNT; i++) {
             sum += run(lambda);
