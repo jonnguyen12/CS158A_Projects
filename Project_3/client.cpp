@@ -139,7 +139,7 @@ int main(int argc, char* argv[])
     server.sin_family = AF_INET;
     server.sin_port = htons(portNumber);
     //    serverInfo->h_addr = "10.189.249.188";
-    inet_aton("24.6.129.25", &server.sin_addr);
+    inet_aton("10.189.251.219", &server.sin_addr);
     //    bcopy((char*)serverInfo->h_addr, (char*)&server.sin_addr, serverInfo->h_length);
     
     //Get server length
@@ -191,17 +191,17 @@ int main(int argc, char* argv[])
             //Receive from server
             returnValue = recvfrom(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, &serverLength);
             if (returnValue < 0) {
-                printError("Error! Can't receive from server\n");
-            } else if (returnValue == 1)
-            {
-                puts("Collision in server. Running backoff...");
-                time = run(lambda);
-                returnValue = sendto(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, serverLength);
-                
-                if (returnValue < 0) {
-                    printError("Error! Can't send to server\n");
-                }
+                puts("Error! Can't receive from server\n");
+                do {
+                    puts("Resending...");
+                    time = run(lambda);
+                    printf("time = %.5f\n", time);
+                    returnValue = sendto(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, serverLength);
+                } while (returnValue < 0);
+            } else {
+                puts("package sent");
             }
+            
             
             sizeOfPacket += sizeof(bChar);
             
