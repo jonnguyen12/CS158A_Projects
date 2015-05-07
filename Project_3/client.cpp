@@ -200,9 +200,9 @@ int main(int argc, char* argv[])
                 } while (returnValue < 0);
             } else {
                 puts("package sent");
+                printf("Server sent: %s\n", buffer);
             }
             
-            printf("Server sent: %s", buffer);
             
             sizeOfPacket += sizeof(bChar);
             
