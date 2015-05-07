@@ -138,99 +138,76 @@ int main(int argc, char* argv[])
     //Set server properties
     server.sin_family = AF_INET;
     server.sin_port = htons(portNumber);
-    //    serverInfo->h_addr = "10.189.249.188";
     inet_aton("10.189.250.7", &server.sin_addr);
-    //    bcopy((char*)serverInfo->h_addr, (char*)&server.sin_addr, serverInfo->h_length);
     
     //Get server length
     serverLength = sizeof(server);
     
-    //printf("Enter a message:\n");
-    
     //Zero out the buffer
     bzero(buffer, 1024);
-    //fgets(buffer, 1023, stdin);
+    
+    //Creating 1KB Packet
     int messageSize = 1000;
     int count = 100;
     
     char bChar[messageSize];
     
     for (int i = 0; i < messageSize; i++) {
-        bChar[i] = 'A';
+        bChar[i] = 'P';
     }
     
-    //Send to server
-    struct timeval start, end;
-    double t1, t2;
-    float averageRTT = 0;
-    
-    int l = 0;
-    int bytes_sent = 0;
-    int sizeOfPacket = 0;
+    //Variables for lambda
     double time = 0; // time for each packet to be sent
     int lambda;
     
+    // N = 20, 18, 16...4
     for (lambda = N; lambda >= 4; lambda -= 2) {
-        
-        for (l = 0; l < count; l++) {
-            if (gettimeofday(&start, NULL)) {
-                printf("Error start time failed.\n");
-            }
+        for (int i = 0; i < RUNCOUNT; i++) {
             
             //Send packet to server each slot time
             time = run(lambda);
-            printf("time = %.5f", time);
+            printf("\nTime to run a packet = %.5f\n", time);
             
+            //Send to server
             returnValue = sendto(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, serverLength);
             if (returnValue < 0) {
-                printError("Error! Can't send to server\n");
+                printError("Error! Can't receive from server.\n");
             }
-            bytes_sent += returnValue;
-            
             
             //Receive from server
             returnValue = recvfrom(sock, buffer, strlen(buffer), 0, (struct sockaddr*)&server, &serverLength);
             if (returnValue < 0) {
-                puts("Error! Can't receive from server\n");
+                printError("Can't receive from server.\n");
+            }
+            
+            printf("Server sent: %s\n", buffer);
+            
+            // 0 = success, 1 = collission
+            if (buffer[0] == '0') {
+                puts("Success");
+            } else if (buffer[0] == '1')
+            {
+                puts("Server has collisions");
                 do {
+                    bzero(buffer, strlen(buffer));
+                    
                     puts("Resending...");
                     time = run(lambda);
                     printf("time = %.5f\n", time);
-                    returnValue = sendto(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, serverLength);
-                } while (returnValue < 0);
-            } else {
-                puts("package sent");
-                printf("Server sent: %s\n", buffer);
+                    sendto(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, serverLength);
+                    returnValue = recvfrom(sock, buffer, strlen(buffer), 0, (struct sockaddr*)&server, &serverLength);
+                    if (returnValue < 0) {
+                        printf("Can't receive from server. Error at line %d", __LINE__ );
+                    }
+                } while (buffer[0] == '1');
             }
             
             //clear the buffer
             bzero(buffer, strlen(buffer));
             
-            sizeOfPacket += sizeof(bChar);
-            
-            if (gettimeofday(&end, NULL)) {
-                printf("Error time end failed\n");
-            }
-            
-            t1 = start.tv_usec;
-            t2 = end.tv_usec;
-            averageRTT += t2 - t1;
-        }
-    }
-    
-    //    t1 += start.tv_sec + (start.tv_usec / 1000000.0);
-    //    t2 += end.tv_sec + (end.tv_usec / 1000000.0);
-    
-    
-    averageRTT = averageRTT / count;
-    printf("time of the day:%g\n", averageRTT);
-    printf("size of packet = %d\n", sizeOfPacket);
-    printf("bytes sent = %d\n", bytes_sent);
-    printf("packet loss = %d\n", sizeOfPacket - bytes_sent);
-    printf("%s\n",bChar);
-    
-    write(1, "Received\n", 20);
-    write(1, &bChar, serverLength);
+        } //End for loop for RUNCOUNT
+        
+    } //End for loop for each lambda
     
     close(sock);
     
