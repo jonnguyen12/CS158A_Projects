@@ -139,7 +139,7 @@ int main(int argc, char* argv[])
     server.sin_family = AF_INET;
     server.sin_port = htons(portNumber);
     //    serverInfo->h_addr = "10.189.249.188";
-    inet_aton("10.189.251.219", &server.sin_addr);
+    inet_aton("10.189.250.7", &server.sin_addr);
     //    bcopy((char*)serverInfo->h_addr, (char*)&server.sin_addr, serverInfo->h_length);
     
     //Get server length
@@ -167,7 +167,7 @@ int main(int argc, char* argv[])
     int l = 0;
     int bytes_sent = 0;
     int sizeOfPacket = 0;
-    double time = 0;
+    double time = 0; // time for each packet to be sent
     int lambda;
     
     for (lambda = N; lambda >= 4; lambda -= 2) {
@@ -189,7 +189,7 @@ int main(int argc, char* argv[])
             
             
             //Receive from server
-            returnValue = recvfrom(sock, bChar, strlen(bChar), 0, (struct sockaddr*)&server, &serverLength);
+            returnValue = recvfrom(sock, buffer, strlen(buffer), 0, (struct sockaddr*)&server, &serverLength);
             if (returnValue < 0) {
                 puts("Error! Can't receive from server\n");
                 do {
@@ -202,6 +202,7 @@ int main(int argc, char* argv[])
                 puts("package sent");
             }
             
+            printf("Server sent: %s", buffer);
             
             sizeOfPacket += sizeof(bChar);
             
