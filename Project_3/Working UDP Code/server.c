@@ -68,9 +68,15 @@ int main(int argc, char* argv[])
         //Receive from Client
         returnValue = recvfrom(sock, buffer, 2048, 0, (struct sockaddr*)&client, &clientLength);
         
-        if (returnValue < 0) {
-            printError("Error! Can't receive from client.\n");
+        //if there is a collision
+        while (returnValue <= 0) {
+            puts("Error! Can't receive from client.\n");
+            puts("Collision happens. Code = 1");
+            char code = '1';
+            returnValue = sendto(sock,&code, 1, 0, (struct sockaddr*)&client, clientLength);
         }
+        
+        
         
         printf("Packet #%d received: %s\n", count++, buffer);
     
