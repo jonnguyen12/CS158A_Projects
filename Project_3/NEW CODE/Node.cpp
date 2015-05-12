@@ -70,7 +70,9 @@ public:
     
     Packet getNextPacketToBeTransmitted()
     {
-        return (Packet) packetQueue.pop();
+        Packet p = packetQueue.top();
+        packetQueue.pop();
+        return p;
     }
     
     double getLambda()
