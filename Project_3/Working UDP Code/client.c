@@ -28,7 +28,7 @@ struct hostent *serverInfo;
 char buffer[1024];
 const int PACKET_SIZE = 1000;
 char packet[PACKET_SIZE];
-const int RUNCOUNT = 10;
+const int RUNCOUNT = 5000;
 const int N = 20;
 
 
@@ -50,6 +50,7 @@ double X(double lambda) {
     
 }
 
+// Run a timeslot with a given lambda
 double run(double lambda)
 {
     int i = 0;
@@ -71,44 +72,15 @@ double run(double lambda)
     
 }
 
-void runLambda() {
-    int i;
-    double sum, lambda;
-    double min, currentValue, max;
-    for (lambda = N; lambda >= 2; lambda -= 2) {
-        sum = 0;
-        min = 0;
-        max = 0;
-        currentValue = 0;
-        for (i = 0; i < RUNCOUNT; i++) {
-            currentValue = run(lambda);
-            
-            if (i == 0) {
-                min = currentValue;
-                max = currentValue;
-            }
-            
-            sum += currentValue;
-            
-            if (currentValue < min) {
-                min = currentValue;
-            }
-            
-            if (currentValue > max) {
-                max = currentValue;
-            }
-            printf("%.3f : %.3f\n", lambda, sum/RUNCOUNT);
-        }
-        
-        printf("%.3f : miminum value = %.3f\n", lambda, min);
-        printf("%.3f : maximum value = %.3f\n", lambda, max);
-        
-    }
+static int backoff(int k) {
+    //choose random number 0..2^k-1; 1e choose k random bits
+    unsigned short r  = rand();
+    unsigned short mask = 0xFFFF >> (16-k); //mask = 2^k-1
+    return (int) (r & mask);
 }
 
 
-
-
+// Main
 int main(int argc, char* argv[])
 {
     
@@ -134,9 +106,7 @@ int main(int argc, char* argv[])
     //Set server properties
     server.sin_family = AF_INET;
     server.sin_port = htons(portNumber);
-    //    serverInfo->h_addr = "10.189.249.188";
-    
-    //    inet_aton("24.6.129.25", &server.sin_addr);
+    //inet_aton("10.189.250.7", &server.sin_addr);
     bcopy((char*)serverInfo->h_addr, (char*)&server.sin_addr, serverInfo->h_length);
     
     //Get server length

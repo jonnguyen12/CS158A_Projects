@@ -16,6 +16,12 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <sys/time.h>
+#include <random>
+
+#define N 20
+#define RUNCOUNT 5
+
+
 
 //Print the system error if there is any
 void printError (char * message)
@@ -91,6 +97,12 @@ void runLambda() {
     }
 }
 
+int backoff (int k) {
+    //choose random number 0..2^k-1; 1e choose k random bits
+    unsigned short r = rand();
+    unsigned short mask = 0xFFFF >> (16-k); //mask = 2^k-1
+    return int (r & mask);
+}
 
 
 
@@ -106,7 +118,6 @@ int main(int argc, char* argv[])
     char buffer[1024];
     const int PACKET_SIZE = 1000;
     char packet[PACKET_SIZE];
-    const int RUNCOUNT = 5000;
     
     //Check if the user does not provide host name and port number
     if (argc != 3) {
@@ -131,7 +142,7 @@ int main(int argc, char* argv[])
     server.sin_port = htons(portNumber);
     //    serverInfo->h_addr = "10.189.249.188";
     
-//    inet_aton("24.6.129.25", &server.sin_addr);
+    //    inet_aton("24.6.129.25", &server.sin_addr);
     bcopy((char*)serverInfo->h_addr, (char*)&server.sin_addr, serverInfo->h_length);
     
     //Get server length
@@ -161,34 +172,60 @@ int main(int argc, char* argv[])
             printf("\nTime to run a packet = %.5f\n", time);
             
             
-    
-    for (int i = 0; i < RUNCOUNT; i++) {
-        
-        //Send a packet to server
-        returnValue = sendto(sock, packet, PACKET_SIZE, 0, (struct sockaddr*)&server, serverLength);
-        
-        
-        if (returnValue < 0) {
-            printError("Error! Can't send to server\n");
+            
+            for (int i = 0; i < RUNCOUNT; i++) {
+                
+                //Send a packet to server
+                returnValue = sendto(sock, packet, PACKET_SIZE, 0, (struct sockaddr*)&server, serverLength);
+                
+                
+                if (returnValue < 0) {
+                    printError("Error! Can't send to server\n");
+                }
+                
+                printf("Sent packet #%d: %s.\n", i + 1, packet);
+                puts("------------------\n\n");
+                
+                //Receive from server
+                returnValue = recvfrom(sock, buffer, 1024, 0, (struct sockaddr*)&from, &serverLength);
+                if (returnValue < 0) {
+                    printError("Error! Can't receive from server\n");
+                }
+                
+                while (buffer[0] == 1) {
+                    printf("Collision.\n");
+                    int resendingTime = backoff(N);
+                    run(resendingTime);
+                    
+                    //Send a packet to server
+                    returnValue = sendto(sock, packet, PACKET_SIZE, 0, (struct sockaddr*)&server, serverLength);
+                    
+                    
+                    if (returnValue < 0) {
+                        printError("Error! Can't send to server\n");
+                    }
+                    
+                    printf("Sent packet #%d: %s.\n", i + 1, packet);
+                    puts("------------------\n\n");
+                    
+                    //Receive from server
+                    returnValue = recvfrom(sock, buffer, 1024, 0, (struct sockaddr*)&from, &serverLength);
+                    if (returnValue < 0) {
+                        printError("Error! Can't receive from server\n");
+                    }
+                }
+                
+                printf("Server's message:");
+                puts(buffer);
+                bzero(buffer, strlen(buffer));
+                
+            }
+            
+            
+            //Close socket
+            close(sock);
+            
+            return 0;
         }
-        
-        printf("Sent packet #%d: %s.\n", i + 1, packet);
-        puts("------------------\n\n");
-        
-        //Receive from server
-        returnValue = recvfrom(sock, buffer, 1024, 0, (struct sockaddr*)&from, &serverLength);
-        if (returnValue < 0) {
-            printError("Error! Can't receive from server\n");
-        }
-        printf("Server's message:");
-        puts(buffer);
-        bzero(buffer, strlen(buffer));
-        
     }
-    
-    
-    //Close socket
-    close(sock);
-    
-    return 0;
 }

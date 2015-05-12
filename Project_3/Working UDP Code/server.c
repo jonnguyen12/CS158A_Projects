@@ -14,6 +14,10 @@
 #include <netinet/in.h>
 #include <strings.h>
 #include <netdb.h>
+#include <time.h>
+
+#define USAGE "ether N"
+
 
 //Print system error message if there is any
 void printError(const char* message)
@@ -62,8 +66,14 @@ int main(int argc, char* argv[])
         printError("Error! Can't bind.\n");
     }
     
+    //Variables for keeping track of timeslot
+    time_t timeSlot = 0.8;
+    time_t start, end, now;
+    time_t diff;
+    
     int count = 1;
     while (1) {
+        
         
         //Receive from Client
         returnValue = recvfrom(sock, buffer, 2048, 0, (struct sockaddr*)&client, &clientLength);

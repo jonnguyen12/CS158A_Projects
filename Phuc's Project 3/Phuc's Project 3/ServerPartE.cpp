@@ -22,7 +22,7 @@ using namespace std;
 //Constants
 #define USAGE "ether N"
 #define MAX 2 // max of stations
-#define SLOT_TIME 0.8   //slot time
+const double SLOT_TIME = 0.8;   //slot time
 #define SLOTS_COUNT 5000 // number of slots
 
 
@@ -135,6 +135,8 @@ void printError(const char* message)
 }
 
 
+
+
 //Main
 int main (int argc, char* argv[])
 {
@@ -148,6 +150,14 @@ int main (int argc, char* argv[])
     struct sockaddr_in server;
     struct sockaddr_in client;
     char buffer[2048];
+    
+    // Count time
+    double slotTime = 0.8;
+    int timeSlots = 20;
+    double start = 0;
+    double end = 0;
+    int collisionCount = 0;
+    int successfulPackets = 0;
     
     if (argc < 2) {
         fprintf(stderr, "Error! Must provide port number.\n");
@@ -177,33 +187,48 @@ int main (int argc, char* argv[])
         printError("Error! Can't bind.\n");
     }
     
-    
-    
     int count = 1;
     while (1) {
         
         
+        start += 0.1;
         
-        //Receive from Client
-        returnValue = recvfrom(sock, buffer, 2048, 0, (struct sockaddr*)&client, &clientLength);
-        
-        if (returnValue < 0) {
-            printError("Error! Can't receive from client.\n");
-        }
-        
-        printf("Packet #%d received: %s\n", count++, buffer);
-        
-        //Send to client
-        returnValue = sendto(sock,"Packet received.\n", 17, 0, (struct sockaddr*)&client, clientLength);
-        
-        if (returnValue < 0) {
-            printError("Error! Can't send to client");
+        if (start >= 0.8) {
+            start = 0;
+            returnValue = sendto(sock,"1 Collision.\n", 17, 0, (struct sockaddr*)&client, clientLength);
+            collisionCount++;
+            continue;
+        } else {
+            //Receive from Client
+            successfulPackets++;
+            returnValue = recvfrom(sock, buffer, 2048, 0, (struct sockaddr*)&client, &clientLength);
+            
+            if (returnValue < 0) {
+                printError("Error! Can't receive from client.\n");
+            }
+            printf("Packet #%d received: %s\n", count++, buffer);
+            
+            //Send to client
+            returnValue = sendto(sock,"Packet received.\n", 17, 0, (struct sockaddr*)&client, clientLength);
+            
+            if (returnValue < 0) {
+                printError("Error! Can't send to client");
+            }
+//            char * success_msg;
+//            sprintf(success_msg, "Successful packets = %d.\n", successfulPackets);
+//            if (sendto(sock,&success_msg, 50, 0, (struct sockaddr*)&client, clientLength) < 0)
+//            {
+//                puts("Error! at line 221");
+//            }
+
         }
         //Clear the buffer
         bzero(buffer, strlen(buffer));
         
+        printf("Collision counts = %d\n", collisionCount);
+        printf("Successful packets = %d.\n", successfulPackets);
+        
     }
-    
     return 0;
 }
 

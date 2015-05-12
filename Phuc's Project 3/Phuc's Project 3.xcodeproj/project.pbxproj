@@ -7,10 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02AC06631AF9695900A8A071 /* client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02AC06611AF9695900A8A071 /* client.cpp */; };
-		02AC06641AF9695900A8A071 /* server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02AC06621AF9695900A8A071 /* server.cpp */; };
+		026F73781B018D8500D34264 /* ServerPartE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 026F73771B018D8500D34264 /* ServerPartE.cpp */; };
+		026F73801B01A8C400D34264 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 026F737E1B01A8C400D34264 /* Node.cpp */; };
+		026F73841B01B34000D34264 /* Node2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 026F73831B01B34000D34264 /* Node2.cpp */; };
+		026F73861B01B45300D34264 /* Packet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 026F73851B01B45300D34264 /* Packet.cpp */; };
+		026F73881B01B88D00D34264 /* Network.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 026F73871B01B88D00D34264 /* Network.cpp */; };
+		026F738A1B01D24200D34264 /* OriginalClient.c in Sources */ = {isa = PBXBuildFile; fileRef = 026F73891B01D24200D34264 /* OriginalClient.c */; };
+		026F738C1B01D43C00D34264 /* ClientPartE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 026F738B1B01D43C00D34264 /* ClientPartE.cpp */; };
 		02F38D671AFC0FD9006758C6 /* newServerCode.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F38D661AFC0FD9006758C6 /* newServerCode.c */; };
 		02F38D691AFC124F006758C6 /* OriginalClient.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F38D681AFC124F006758C6 /* OriginalClient.c */; };
+		02F38D6C1AFC2750006758C6 /* client.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F38D6A1AFC2750006758C6 /* client.c */; };
+		02F38D6D1AFC2750006758C6 /* server.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F38D6B1AFC2750006758C6 /* server.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,11 +33,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		02AC06611AF9695900A8A071 /* client.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = client.cpp; path = ../../Project_3/client.cpp; sourceTree = "<group>"; };
-		02AC06621AF9695900A8A071 /* server.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = server.cpp; path = ../../Project_3/server.cpp; sourceTree = "<group>"; };
+		026F73771B018D8500D34264 /* ServerPartE.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ServerPartE.cpp; sourceTree = "<group>"; };
+		026F737E1B01A8C400D34264 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Node.cpp; path = "Code From Java/Node.cpp"; sourceTree = "<group>"; };
+		026F73831B01B34000D34264 /* Node2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Node2.cpp; path = "Code From Java/Node2.cpp"; sourceTree = "<group>"; };
+		026F73851B01B45300D34264 /* Packet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Packet.cpp; path = "Code From Java/Packet.cpp"; sourceTree = "<group>"; };
+		026F73871B01B88D00D34264 /* Network.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Network.cpp; path = "Code From Java/Network.cpp"; sourceTree = "<group>"; };
+		026F73891B01D24200D34264 /* OriginalClient.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = OriginalClient.c; sourceTree = "<group>"; };
+		026F738B1B01D43C00D34264 /* ClientPartE.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ClientPartE.cpp; sourceTree = "<group>"; };
 		02B50C781AF025BC0032349A /* Phuc's Project 3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Phuc's Project 3"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02F38D661AFC0FD9006758C6 /* newServerCode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = newServerCode.c; path = ../../Project_3/newServerCode.c; sourceTree = "<group>"; };
 		02F38D681AFC124F006758C6 /* OriginalClient.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = OriginalClient.c; path = ../../Project_3/OriginalClient.c; sourceTree = "<group>"; };
+		02F38D6A1AFC2750006758C6 /* client.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = client.c; path = "../../Project_3/Working UDP Code/client.c"; sourceTree = "<group>"; };
+		02F38D6B1AFC2750006758C6 /* server.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = server.c; path = "../../Project_3/Working UDP Code/server.c"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +58,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		026F73791B01A4CB00D34264 /* Conversion from java */ = {
+			isa = PBXGroup;
+			children = (
+				026F737E1B01A8C400D34264 /* Node.cpp */,
+				026F73831B01B34000D34264 /* Node2.cpp */,
+				026F73851B01B45300D34264 /* Packet.cpp */,
+				026F73871B01B88D00D34264 /* Network.cpp */,
+			);
+			name = "Conversion from java";
+			sourceTree = "<group>";
+		};
+		026F737A1B01A4D800D34264 /* Original C Code */ = {
+			isa = PBXGroup;
+			children = (
+				02F38D6A1AFC2750006758C6 /* client.c */,
+				02F38D6B1AFC2750006758C6 /* server.c */,
+				02F38D661AFC0FD9006758C6 /* newServerCode.c */,
+				02F38D681AFC124F006758C6 /* OriginalClient.c */,
+				026F73891B01D24200D34264 /* OriginalClient.c */,
+			);
+			name = "Original C Code";
+			sourceTree = "<group>";
+		};
+		026F738D1B01E57600D34264 /* Working */ = {
+			isa = PBXGroup;
+			children = (
+				026F73771B018D8500D34264 /* ServerPartE.cpp */,
+				026F738B1B01D43C00D34264 /* ClientPartE.cpp */,
+			);
+			name = Working;
+			sourceTree = "<group>";
+		};
 		02B50C6F1AF025BC0032349A = {
 			isa = PBXGroup;
 			children = (
@@ -63,10 +109,9 @@
 		02B50C7A1AF025BC0032349A /* Phuc's Project 3 */ = {
 			isa = PBXGroup;
 			children = (
-				02AC06621AF9695900A8A071 /* server.cpp */,
-				02AC06611AF9695900A8A071 /* client.cpp */,
-				02F38D661AFC0FD9006758C6 /* newServerCode.c */,
-				02F38D681AFC124F006758C6 /* OriginalClient.c */,
+				026F738D1B01E57600D34264 /* Working */,
+				026F73791B01A4CB00D34264 /* Conversion from java */,
+				026F737A1B01A4D800D34264 /* Original C Code */,
 			);
 			path = "Phuc's Project 3";
 			sourceTree = "<group>";
@@ -127,10 +172,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02AC06641AF9695900A8A071 /* server.cpp in Sources */,
+				02F38D6D1AFC2750006758C6 /* server.c in Sources */,
+				026F73881B01B88D00D34264 /* Network.cpp in Sources */,
 				02F38D691AFC124F006758C6 /* OriginalClient.c in Sources */,
+				026F73841B01B34000D34264 /* Node2.cpp in Sources */,
+				026F738C1B01D43C00D34264 /* ClientPartE.cpp in Sources */,
+				026F73861B01B45300D34264 /* Packet.cpp in Sources */,
 				02F38D671AFC0FD9006758C6 /* newServerCode.c in Sources */,
-				02AC06631AF9695900A8A071 /* client.cpp in Sources */,
+				026F73801B01A8C400D34264 /* Node.cpp in Sources */,
+				026F738A1B01D24200D34264 /* OriginalClient.c in Sources */,
+				026F73781B018D8500D34264 /* ServerPartE.cpp in Sources */,
+				02F38D6C1AFC2750006758C6 /* client.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

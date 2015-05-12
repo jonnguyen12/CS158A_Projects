@@ -8,33 +8,85 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <queue>
-
+#include <string>
 using namespace std;
 
 class Packet {
+
 private:
-    double BACKOFF_CONSTANT = 51.2;
-    double time;
-    double lambda;
+    int stationName;
+    double contentionInterval;
+    double transmittedTime;
     int collisionCount;
-    bool initialized = false;
-    
-    bool collided;
-    priority_queue<Packet> packetQueue;
-    
     
 public:
-    //Init a new node at time t
-    Node2 (double newLambda)
+    Packet();
+//        stationName = 0;
+//        contentionInterval = 0;
+//        transmittedTime = 0;
+//        collisionCount = 0;
+    
+    Packet(int nameOfStation, double generatedTime)
     {
+        contentionInterval = generatedTime;
+        stationName = nameOfStation;
+        transmittedTime = 0.0;
         collisionCount = 0;
-        lambda = newLambda;
-        time = poisson(newLambda);
-        collided = false;
     }
     
-    //Returns a random value
-    double poisson (double aLambda)
+    double getContentionInterval()
+    {
+        return contentionInterval;
+    }
     
+    int getStationName()
+    {
+        return stationName;
+    }
+    
+    double getStationTime()
+    {
+        return transmittedTime;
+    }
+    
+    void setContentionInterval(double interval)
+    {
+        contentionInterval = interval;
+    }
+    
+    void setStationName(int name)
+    {
+        stationName = name;
+    }
+    
+    void incrementCollision()
+    {
+        collisionCount++;
+    }
+    
+    void setStationTime(double time)
+    {
+        transmittedTime = time;
+    }
+    
+    int getCollisionCount()
+    {
+        return collisionCount;
+    }
+    
+    string getString()
+    {
+        return to_string(contentionInterval) + " " + to_string(stationName);
+    }
+    
+    int compareTo(Packet t)
+    {
+        if (t.contentionInterval < contentionInterval) {
+            return -1;
+        } else if (t.contentionInterval == contentionInterval) {
+            return 0;
+        }
+        else
+            return 1;
+    }
 };

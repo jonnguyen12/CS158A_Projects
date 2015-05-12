@@ -24,8 +24,9 @@ private:
     bool collided;
     int randomNumber;
     int name;
-    priority_queue<Packet> packetQueue;
+    queue<Packet> packetQueue;
 public:
+    Node();
     Node(int newName, double newLambda) {
         name = newName;
         lamda = newLambda;
@@ -49,7 +50,8 @@ public:
         
         u = rand();
         val = (-1) * log(u) * anotherLambda;
-        packetQueue.push(Packet(name, val));
+        Packet p(name, val);
+        packetQueue.push(p);
         return val;
     }
     
@@ -70,7 +72,9 @@ public:
     
     Packet getNextPacketToBeTransmitted()
     {
-        return (Packet) packetQueue.pop();
+        Packet p = packetQueue.front();
+        packetQueue.pop();
+        return p;
     }
     
     double getLambda()
@@ -87,12 +91,12 @@ public:
     int compareTo(Node t)
     {
         if (t.time < time) {
-            return -1;
+            return 1;
         } else if (t.time == time) {
             return 0;
         }
         else
-            return 1;
+            return -1;
     }
 
 
